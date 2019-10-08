@@ -176,6 +176,8 @@ class SitemapController extends Controller
             ->innerJoin('{{%elements_sites}} elements_sites', '[[elements_sites.elementId]] = [[elements.id]] AND [[elements_sites.enabled]] = 1')
             ->innerJoin('{{%sites}} sites', '[[elements_sites.siteId]] = [[sites.id]]')
             ->andWhere(['elements.dateDeleted' => null])
+            ->andWhere(['elements.draftId' => null])
+            ->andWhere(['elements.revisionId' => null])
             ->groupBy(['elements_sites.id']);
     }
 
@@ -213,6 +215,8 @@ class SitemapController extends Controller
             ->innerJoin('{{%elements_sites}} elements_sites', '[[elements_sites.elementId]] = [[elements.id]] AND [[elements_sites.enabled]] = 1')
             ->innerJoin('{{%sites}} sites', '[[elements_sites.siteId]] = [[sites.id]]')
             ->andWhere(['elements.dateDeleted' => null])
+            ->andWhere(['elements.draftId' => null])
+            ->andWhere(['elements.revisionId' => null])
             ->groupBy(['elements_sites.id']);
     }
 

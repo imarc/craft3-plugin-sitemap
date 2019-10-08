@@ -70,7 +70,8 @@ class SettingsController extends Controller
             ->leftJoin('{{%entries}} entries', '[[sections.id]] = [[entries.sectionId]]')
             ->leftJoin('{{%elements}} elements', '[[entries.id]] = [[elements.id]] AND [[elements.enabled]] = 1')
             ->leftJoin('{{%dolphiq_sitemap_entries}} sitemap_entries', '[[sections.id]] = [[sitemap_entries.linkId]] AND [[sitemap_entries.type]] = "section"')
-
+            ->andWhere(['elements.draftId' => null])
+            ->andWhere(['elements.revisionId' => null])
             ->groupBy(['sections.id'])
         ->orderBy(['type' => SORT_ASC],['name' => SORT_ASC]);
     }
@@ -91,8 +92,12 @@ class SettingsController extends Controller
             ->innerJoin('{{%categorygroups}} categorygroups', '[[categories.groupId]] = [[categorygroups.id]]')
             ->innerJoin('{{%categorygroups_sites}} categorygroups_sites', '[[categorygroups_sites.groupId]] = [[categorygroups.id]] AND [[categorygroups_sites.hasUrls]] = 1')
             ->leftJoin('{{%entries}} entries', '[[categories.id]] = [[entries.sectionId]]')
-            ->leftJoin('{{%elements}} elements', '[[entries.id]] = [[elements.id]] AND [[elements.enabled]] = 1')
+            ->leftJoin('{{%elements}} elements', '[[entries.id]] = [[elements.id]] AND [[elements.enabled]] = 1 AND [[elements.draftId]] IS NULL')
             ->leftJoin('{{%dolphiq_sitemap_entries}} sitemap_entries', '[[categorygroups.id]] = [[sitemap_entries.linkId]] AND [[sitemap_entries.type]] = "category"')
+            //->andWhere(['categories.deletedWithGroup' => [null, 0]])
+            ->andWhere(['categorygroups.dateDeleted' => null])
+            ->andWhere(['elements.draftId' => null])
+            ->andWhere(['elements.revisionId' => null])
             ->groupBy(['categorygroups.id'])
             ->orderBy(['name' => SORT_ASC]);
     }
